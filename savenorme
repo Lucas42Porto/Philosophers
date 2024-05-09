@@ -1,0 +1,3 @@
+./src/philo.c: Error! Error: BRACE_SHOULD_EOL (line: 44, col: 1): Expected newline after brace
+./src/init_data.c: Error! Error: LINE_TOO_LONG (line: 52, col: 1): line too long
+./src/threads.c: Error! Error: CONSECUTIVE_NEWLINES (line: 15, col: 1): Consecutive newlines
