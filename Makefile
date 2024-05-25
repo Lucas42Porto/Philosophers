@@ -6,7 +6,7 @@
 #    By: lumarque <lumarque@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/07 19:24:47 by lumarque          #+#    #+#              #
-#    Updated: 2024/05/07 19:24:49 by lumarque         ###   ########.fr        #
+#    Updated: 2024/05/25 22:14:13 by lumarque         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,13 +14,20 @@
 NAME = philo
 CC = cc
 RM = rm -f
-FLAGS = -Wall -Wextra -Werror 
+FLAGS = -Wall -Wextra -Werror -g# -fsanitize=thread
 
 SRC =	./src/philo.c \
 		./src/utils.c \
 		./src/init_data.c \
-		./src/ft_die.c \
-		./src/threads.c \
+		./src/time.c \
+		./src/monitor.c \
+		./src/eat_1.c \
+		./src/eat_2.c \
+		./src/get_funct1.c \
+		./src/get_funct2.c \
+		./src/set_funct.c \
+		./src/routine.c \
+		./src/check_input.c \
 
 
 # ------------------------------ Colors ------------------------------
@@ -50,7 +57,7 @@ OBJ = ${SRC:.c=.o}
 
 ${NAME}: ${OBJ}
 		@$(COMP_START)
-		@${CC} ${OBJ} -o ${NAME}
+		@${CC} ${OBJ} -o ${NAME} -pthread
 		@$(READY) 
 
 all: ${NAME}

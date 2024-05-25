@@ -1,175 +1,89 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   threads.c                                          :+:      :+:    :+:   */
+/*   init_data.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lumarque <lumarque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 13:19:45 by lumarque          #+#    #+#             */
-/*   Updated: 2024/05/07 19:09:23 by lumarque         ###   ########.fr       */
+/*   Updated: 2024/05/25 21:08:41 by lumarque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
 
-/*
-	This function make necessary checks for the given arguments.
-	If there is no negative numbers, it converts them to integer in first 
-	if condition. Second if checks whether the optional argument is given
-	and positive. Third if checks if second parameter(time to did_die) is zero. 
-	If so, philosopher will did_die right away. Last if checks if there is 
-	only 1 philosopher. In this condition he will also did_die right away since
-	there isn't enough fork on the table.
-*/
-int	ft_check(int argc, char **argv)
+int	init_forks(t_data *data)
 {
-	if (ft_atoi(argv[2]) < 0 || ft_atoi(argv[3]) < 0 || ft_atoi(argv[4]) < 0
-		|| ft_atoi(argv[1]) < 0)
-	{
-		printf("Wrong input parameters!\n");
-		return (0);
-	}
-	if (argc == 6 && ft_atoi(argv[5]) < 1)
-		return (0);
-	if (ft_atoi(argv[1]) > 0 && ft_atoi(argv[2]) == 0)
-	{
-		printf("0ms 1 did_died!\n");
-		return (0);
-	}
-	if (ft_atoi(argv[1]) == 1)
-	{
-		printf("0ms 1 has taken a fork\n");
-		printf("%ims 1 did_died!\n", ft_atoi(argv[2]));
-		return (0);
-	}
-	return (ft_atoi(argv[1]));
-}
+	int		i;
+	t_philo	*philos;
 
-/*	
-	In this function, one while loop has been used to loop thorough philosophers
-	and tell introduce them leftFork. The methos of introducing them is;
-	the philosopher who sits next to you has a fork on his left hand side and
-	this fork will be your leftFork. This while loop turn around the table kind of
-	like clockwise. Besides of that some values has been initialized
-	while looping thorough philosophers.
-*/
-int	ft_initialize_sub2(int argc, char **argv, t_phi_data *data)
-{
-	t_phi_data			*tmp;
-	t_phi_data			*tmp2;
-
-	tmp2 = data;
-	while (tmp2)
-	{
-		tmp = tmp2->next;
-		tmp2->die_time = ft_atoi(argv[2]);
-		tmp2->eat_time = ft_atoi(argv[3]);
-		tmp2->sleep_time = ft_atoi(argv[4]);
-		tmp2->must_eat = 0;
-		if (argc == 6)
-			tmp2->must_eat = ft_atoi(argv[5]);
-		if (tmp == NULL)
-			tmp2->fork_l = data->fork_r;
-		else
-			tmp2->fork_l = tmp->fork_r;
-		tmp2 = tmp2->next;
-	}
-	return (0);
-}
-
-/*
-	This function creates rightFork as much as the philosopher number. 
-	The rightFork has been created as a mutex since it will be a shared
-	resource. Besides of that some values has been initialized
-	while looping thorough philosophers.
-*/
-int	ft_initialize_sub(t_phi_data *data, int k, int *did_die)
-{
-	t_phi_data				*tmp;
-	int						i;
-
+	philos = data->philos;
+	i = -1;
+	while (++i < data->nb_philos)
+		pthread_mutex_init(&data->forks[i], NULL);
 	i = 0;
-	while (k > i++)
+	philos[0].left_f = &data->forks[0];
+	philos[0].right_f = &data->forks[data->nb_philos - 1];
+	while (++i < data->nb_philos)
 	{
-		data->total_philo = k;
-		data->did_die = did_die;
-		data->index = i;
-		data->next = NULL;
-		data->fork_r = malloc(sizeof(pthread_mutex_t) * 1);
-		if (!data->fork_r || pthread_mutex_init(data->fork_r, 0))
-			return (1);
-		if (k == i)
-			break ;
-		tmp = malloc(sizeof(t_phi_data) * 1);
-		if (!tmp)
-			return (1);
-		data->next = tmp;
-		data = tmp;
+		philos[i].left_f = &data->forks[i];
+		philos[i].right_f = &data->forks[i - 1];
 	}
 	return (0);
 }
 
-/* 
-	In this function, two mutex have been created.
-	One is for tmp pointer to carry the funeral pointer
-	to the next node. On the other hand, funeral pointer
-	points the funeral mutex. It is created as mutex because
-	it will be shared in between philosophers. Philosophers
-	use it stop the program and tell the others that there
-	is going to be a funeral and stop working. Without him
-	there would be a data race and some messages still would
-	be printed out to the terminal after somebody died.
-*/
-int	ft_initialize_sub3(t_phi_data *data)
+int	init_philos(t_data *data)
 {
-	pthread_mutex_t		*funeral;
-	pthread_mutex_t		*tmp;
+	t_philo	*philos;
+	int		i;
 
-	funeral = malloc(sizeof(pthread_mutex_t) * 1);
-	if (!funeral || pthread_mutex_init(funeral, 0))
-		return (1);
-	tmp = malloc(sizeof(pthread_mutex_t) * 1);
-	if (!tmp || pthread_mutex_init(tmp, 0))
-		return (1);
-	while (data)
+	i = -1;
+	philos = data->philos;
+	while (++i < data->nb_philos)
 	{
-		data->done_eat = tmp;
-		data->funeral = funeral;
-		data = data->next;
+		philos[i].data = data;
+		philos[i].id = i + 1;
+		philos[i].nb_meals_had = 0;
+		philos[i].state = IDLE;
+		pthread_mutex_init(&philos[i].mut_state, NULL);
+		pthread_mutex_init(&philos[i].mut_nb_meals_had, NULL);
+		pthread_mutex_init(&philos[i].mut_last_eat_time, NULL);
+		update_last_meal_time(&philos[i]);
 	}
 	return (0);
 }
 
-/*
-	This function is a main function where I call three other 
-	functions from above. The reason of that is to follow dictated
-	42 norms.
-*/
-t_phi_data	*ft_start(int argc, char **argv, int *did_die)
+int	malloc_data(t_data *data)
 {
-	int			k;
-	t_phi_data	*data;
+	data->philos = malloc(sizeof(t_philo) * data->nb_philos);
+	if (data->philos == NULL)
+		return (MALLOC_ERROR);
+	data->forks = malloc(sizeof(pthread_mutex_t) * data->nb_philos);
+	if (data->forks == NULL)
+		return (free(data->philos), MALLOC_ERROR);
+	data->philo_ths = malloc(sizeof(pthread_t) * data->nb_philos);
+	if (data->philo_ths == NULL)
+		return (free(data->philos), free(data->forks), MALLOC_ERROR);
+	return (0);
+}
 
-	k = ft_check(argc, argv);
-	if (k < 1)
-		return (NULL);
-	data = malloc(sizeof(t_phi_data) * 1);
-	if (!data)
-		return (NULL);
-	if (ft_initialize_sub(data, k, did_die))
-	{
-		ft_free(data);
-		return (NULL);
-	}
-	if (ft_initialize_sub2(argc, argv, data))
-	{
-		ft_free(data);
-		return (NULL);
-	}
-	if (ft_initialize_sub3(data))
-	{
-		ft_free(data);
-		return (NULL);
-	}
-	return (data);
+int	init_data(t_data *data, int argc, char **argv)
+{
+	data->nb_full_p = 0;
+	data->keep_iterating = true;
+	data->nb_philos = ft_atoi(argv[1]);
+	data->die_time = (u_int64_t) ft_atoi(argv[2]);
+	data->eat_time = (u_int64_t) ft_atoi(argv[3]);
+	data->sleep_time = (u_int64_t) ft_atoi(argv[4]);
+	data->nb_meals = -1;
+	if (argc == 6)
+		data->nb_meals = ft_atoi(argv[5]);
+	pthread_mutex_init(&data->mut_eat_t, NULL);
+	pthread_mutex_init(&data->mut_sleep_t, NULL);
+	pthread_mutex_init(&data->mut_die_t, NULL);
+	pthread_mutex_init(&data->mut_print, NULL);
+	pthread_mutex_init(&data->mut_nb_philos, NULL);
+	pthread_mutex_init(&data->mut_keep_iter, NULL);
+	pthread_mutex_init(&data->mut_start_time, NULL);
+	return (malloc_data(data));
 }
