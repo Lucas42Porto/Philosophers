@@ -6,7 +6,7 @@
 /*   By: lumarque <lumarque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 13:19:45 by lumarque          #+#    #+#             */
-/*   Updated: 2024/05/25 21:08:41 by lumarque         ###   ########.fr       */
+/*   Updated: 2024/08/24 10:50:37 by lumarque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,9 +72,9 @@ int	init_data(t_data *data, int argc, char **argv)
 	data->nb_full_p = 0;
 	data->keep_iterating = true;
 	data->nb_philos = ft_atoi(argv[1]);
-	data->die_time = (u_int64_t) ft_atoi(argv[2]);
-	data->eat_time = (u_int64_t) ft_atoi(argv[3]);
-	data->sleep_time = (u_int64_t) ft_atoi(argv[4]);
+	data->die_time = (suseconds_t) ft_atoi(argv[2]);
+	data->eat_time = (suseconds_t) ft_atoi(argv[3]);
+	data->sleep_time = (suseconds_t) ft_atoi(argv[4]);
 	data->nb_meals = -1;
 	if (argc == 6)
 		data->nb_meals = ft_atoi(argv[5]);

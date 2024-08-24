@@ -6,7 +6,7 @@
 /*   By: lumarque <lumarque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 12:45:03 by lumarque          #+#    #+#             */
-/*   Updated: 2024/05/25 21:09:42 by lumarque         ###   ########.fr       */
+/*   Updated: 2024/08/24 10:51:26 by lumarque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	free_data(t_data *data)
 
 void	print_msg(t_data *data, int id, char *msg)
 {
-	uint64_t	time;
+	suseconds_t	time;
 
 	time = get_time() - get_start_time(data);
 	pthread_mutex_lock(&data->mut_print);

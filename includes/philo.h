@@ -6,7 +6,7 @@
 /*   By: lumarque <lumarque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 10:31:58 by lumarque          #+#    #+#             */
-/*   Updated: 2024/08/24 08:16:20 by lumarque         ###   ########.fr       */
+/*   Updated: 2024/08/24 10:52:51 by lumarque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ typedef struct s_philo
 	pthread_mutex_t	mut_state;
 	pthread_mutex_t	mut_nb_meals_had;
 	pthread_mutex_t	mut_last_eat_time;
-	u_int64_t		last_eat_time;
+	suseconds_t		last_eat_time;
 }					t_philo;
 
 typedef struct s_data
@@ -64,10 +64,10 @@ typedef struct s_data
 	int				nb_meals;
 	int				nb_full_p;
 	bool			keep_iterating;
-	u_int64_t		eat_time;
-	u_int64_t		die_time;
-	u_int64_t		sleep_time;
-	u_int64_t		start_time;
+	suseconds_t		eat_time;
+	suseconds_t		die_time;
+	suseconds_t		sleep_time;
+	suseconds_t		start_time;
 	pthread_mutex_t	mut_eat_t;
 	pthread_mutex_t	mut_die_t;
 	pthread_mutex_t	mut_sleep_t;
@@ -98,9 +98,9 @@ int			init_philos(t_data *data);
 int			init_forks(t_data *data);
 
 // time.c
-u_int64_t	get_time(void);
-void		ft_usleep(uint64_t time);
-void		wait_until(u_int64_t wakeup_time);
+suseconds_t	get_time(void);
+void		ft_usleep(suseconds_t time);
+void		wait_until(suseconds_t wakeup_time);
 
 // monitoring.c
 void		*all_full_routine(void *data_p);
@@ -124,15 +124,15 @@ int			ft_sleep(t_philo *philo);
 int			think(t_philo *philo);
 
 // getters.c
-uint64_t	get_die_time(t_data *data);
-uint64_t	get_eat_time(t_data *data);
-uint64_t	get_sleep_time(t_data *data);
+suseconds_t	get_die_time(t_data *data);
+suseconds_t	get_eat_time(t_data *data);
+suseconds_t	get_sleep_time(t_data *data);
 bool		get_keep_iter(t_data *data);
-uint64_t	get_start_time(t_data *data);
+suseconds_t	get_start_time(t_data *data);
 int			get_nb_philos(t_data *data);
 t_state		get_philo_state(t_philo *philo);
 int			get_nb_meals_philo_had(t_philo *philo);
-uint64_t	get_last_eat_time(t_philo *philo);
+suseconds_t	get_last_eat_time(t_philo *philo);
 
 // setters.c
 void		set_keep_iterating(t_data *data, bool set_to);

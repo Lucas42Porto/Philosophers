@@ -6,16 +6,16 @@
 /*   By: lumarque <lumarque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 21:17:25 by lumarque          #+#    #+#             */
-/*   Updated: 2024/05/25 22:15:30 by lumarque         ###   ########.fr       */
+/*   Updated: 2024/08/24 10:51:16 by lumarque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
 
-void	wait_until(u_int64_t wakeup_time)
+void	wait_until(suseconds_t wakeup_time)
 {
 	int			margin;
-	u_int64_t	time;
+	suseconds_t	time;
 
 	margin = 5;
 	while (1)
@@ -34,20 +34,20 @@ void	wait_until(u_int64_t wakeup_time)
 	}
 }
 
-void	ft_usleep(uint64_t sleep_time)
+void	ft_usleep(suseconds_t sleep_time)
 {
-	u_int64_t	start;
+	suseconds_t	start;
 
 	start = get_time();
 	while ((get_time() - start) < sleep_time)
 		usleep(500);
 }
 
-u_int64_t	get_time(void)
+suseconds_t	get_time(void)
 {
 	struct timeval	tv;
 
 	if (gettimeofday(&tv, NULL))
 		return (0);
-	return ((tv.tv_sec * (u_int64_t)1000) + (tv.tv_usec / 1000));
+	return ((tv.tv_sec * (suseconds_t)1000) + (tv.tv_usec / 1000));
 }

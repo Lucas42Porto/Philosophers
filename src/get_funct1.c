@@ -6,7 +6,7 @@
 /*   By: lumarque <lumarque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 21:29:10 by lumarque          #+#    #+#             */
-/*   Updated: 2024/08/24 08:14:17 by lumarque         ###   ########.fr       */
+/*   Updated: 2024/08/24 10:50:14 by lumarque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,9 @@ int	get_nb_meals_philo_had(t_philo *philo)
 	return (nb_meals_had);
 }
 
-uint64_t	get_start_time(t_data *data)
+suseconds_t	get_start_time(t_data *data)
 {
-	uint64_t	time;
+	suseconds_t	time;
 
 	pthread_mutex_lock(&data->mut_start_time);
 	time = data->start_time;
