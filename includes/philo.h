@@ -6,7 +6,7 @@
 /*   By: lumarque <lumarque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 10:31:58 by lumarque          #+#    #+#             */
-/*   Updated: 2024/05/25 22:10:27 by lumarque         ###   ########.fr       */
+/*   Updated: 2024/08/24 08:16:20 by lumarque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ typedef struct s_philo
 	pthread_mutex_t	mut_nb_meals_had;
 	pthread_mutex_t	mut_last_eat_time;
 	u_int64_t		last_eat_time;
-}t_philo;
+}					t_philo;
 
 typedef struct s_data
 {
@@ -80,7 +80,7 @@ typedef struct s_data
 	pthread_t		*philo_ths;
 	pthread_mutex_t	*forks;
 	t_philo			*philos;
-}t_data;
+}					t_data;
 
 // routine.c
 void		*routine(void *philo_p);

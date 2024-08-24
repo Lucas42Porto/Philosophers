@@ -6,7 +6,7 @@
 /*   By: lumarque <lumarque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 13:19:14 by lumarque          #+#    #+#             */
-/*   Updated: 2024/05/25 21:16:28 by lumarque         ###   ########.fr       */
+/*   Updated: 2024/08/24 08:15:01 by lumarque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ void	print_nb_meals_had(t_philo *philo)
 	printf("Philo %d ate %d times\n", philo->id, philo->nb_meals_had);
 	pthread_mutex_unlock(&data->mut_print);
 }
+
 int	ft_sleep(t_philo *philo)
 {
 	set_philo_state(philo, SLEEPING);

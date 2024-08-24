@@ -6,7 +6,7 @@
 /*   By: lumarque <lumarque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 10:32:44 by lumarque          #+#    #+#             */
-/*   Updated: 2024/05/25 21:06:38 by lumarque         ###   ########.fr       */
+/*   Updated: 2024/08/24 08:13:59 by lumarque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,12 +70,6 @@ int	philosophers(int argc, char **argv)
 	return (0);
 }
 
-void	leaks(void)
-{
-	system("leaks philo");
-}
-
-	// atexit(&leaks);
 int	main(int argc, char **argv)
 {
 	if (check_input(argc, argv) != 0)
@@ -87,9 +81,3 @@ int	main(int argc, char **argv)
 		return (MALLOC_ERROR);
 	return (0);
 }
-
-// fix printing
-// fix philo_died()
-// fix routing order MAYBE
-// WHAT SHOULD IT DO WHEN NB_MEALS IS <= 0?
-// is it possible to print in smaller periods?

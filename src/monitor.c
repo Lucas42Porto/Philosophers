@@ -6,7 +6,7 @@
 /*   By: lumarque <lumarque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 21:22:23 by lumarque          #+#    #+#             */
-/*   Updated: 2024/05/25 22:15:41 by lumarque         ###   ########.fr       */
+/*   Updated: 2024/08/22 01:18:44 by lumarque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,7 @@ bool	philo_died(t_philo *philo)
 
 	data = philo->data;
 	result = false;
-	if (get_time() - get_last_eat_time(philo) > get_die_time(data)
-		&& get_philo_state(philo) != EATING)
+	if (get_time() - get_last_eat_time(philo) > get_die_time(data))
 	{
 		set_philo_state(philo, DEAD);
 		result = true;
